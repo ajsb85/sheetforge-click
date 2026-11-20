@@ -1,5 +1,8 @@
 .env
 .env.*
+!.env.sample
+/Xiaomi MiMo-V2.6.txt
+*:Zone.Identifier
 .venv/
 __pycache__/
 *.py[cod]
