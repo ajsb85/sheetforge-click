@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sheetforge-click"
+version = "0.1.0"
+description = "Build a source-linked LLM corpus from local MikroE Click board documentation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "liteparse==2.19.0",
+    "lxml>=4.9",
+    "pymupdf>=1.26.5,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+sheetforge-click = "sheetforge_click.click_corpus:main"
+
+[project.urls]
+Repository = "https://github.com/ajsb85/sheetforge-click"
+Issues = "https://github.com/ajsb85/sheetforge-click/issues"
+
+[tool.setuptools]
+packages = ["sheetforge_click"]
