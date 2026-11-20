@@ -67,3 +67,6 @@ See the [architecture guide](docs/architecture.md) for extraction and output
 details, and the [contribution guide](CONTRIBUTING.md) for development setup.
 The [MIT license](LICENSE) covers this repository's code. Dependencies have
 their own licenses, including PyMuPDF's AGPL and commercial licensing options.
+
+Use [the driver workflow](docs/driver-workflow.md) to generate mikroSDK 2.0
+packages from corpus evidence with Xiaomi MiMo.
