@@ -51,3 +51,20 @@ def test_operation_trace_expands_only_to_approved_claims():
     expand_operation_traces(package, plan())
     assert [row["claim"] for row in package["trace"]] == ["read_address"]
     assert not package_findings(package, ("driver.c",), plan())
+
+
+def test_unmapped_prose_is_reported_without_bypassing_code_checks():
+    from sheetforge_click.driver_contract import separate_documentation_traces
+
+    package = {
+        "files": {"driver.c": "#define ADDRESS 0x2E", "README.md": "I2C device"},
+        "trace": [
+            {"claim": "read_address", "path": "README.md", "symbol": "Missing heading"},
+            {"claim": "read_address", "path": "driver.c", "symbol": "STILL_MISSING"},
+        ],
+        "limitations": [],
+    }
+    notes = separate_documentation_traces(package, plan())
+    assert [row["path"] for row in notes] == ["README.md"]
+    issues = package_findings(package, ("driver.c", "README.md"), plan())
+    assert issues == ["Invalid trace: read_address -> driver.c::STILL_MISSING"]

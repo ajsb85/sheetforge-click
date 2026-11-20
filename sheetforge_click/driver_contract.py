@@ -128,3 +128,25 @@ def expand_operation_traces(package: dict, plan: dict) -> None:
         else:
             expanded.append(row)
     package["trace"] = expanded
+
+
+def separate_documentation_traces(package: dict, plan: dict) -> list[dict]:
+    """Keep code anchors in the gate and log unresolved prose references separately."""
+    rows = package.get("trace")
+    files = package.get("files")
+    if not isinstance(rows, list) or not isinstance(files, dict):
+        return []
+    names = {claim["name"] for claim in plan["claims"]}
+    kept = []
+    unresolved = []
+    for row in rows:
+        if isinstance(row, dict) and all(isinstance(row.get(key), str) for key in ("path", "claim", "symbol")):
+            path = row["path"]
+            text = files.get(path)
+            if (row["claim"] in names and isinstance(text, str) and not path.endswith((".c", ".h"))
+                    and row["symbol"] not in text):
+                unresolved.append(row)
+                continue
+        kept.append(row)
+    package["trace"] = kept
+    return unresolved

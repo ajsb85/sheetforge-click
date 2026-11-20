@@ -65,7 +65,7 @@ board mapping. Library APIs take a context and handle bus failure. Keep
 hardware constants named, constrain writes to the documented mask and add
 engineering units to public interfaces. Prefer simple, useful operations
 over broad speculative coverage. Include the board overview, hookup, example,
-operation limits and page citations in README. Cite every hardware-specific
+operation limits and page citations in README. Use literal .c or .h identifiers for trace anchors. Cite every hardware-specific
 constant and key operation in trace using the approved plan. SDK/framework
 constants are exempt. The reference target implementation is withheld.
 """

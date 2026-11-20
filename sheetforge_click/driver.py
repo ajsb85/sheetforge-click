@@ -10,7 +10,10 @@ import tempfile
 from pathlib import Path
 
 from .click_corpus import write_summary, write_text
-from .driver_contract import decode_reply, expand_operation_traces, package_findings, plan_findings
+from .driver_contract import (
+    decode_reply, expand_operation_traces, package_findings, plan_findings,
+    separate_documentation_traces,
+)
 from .driver_evidence import BoardEvidence
 from .driver_mimo import FileExchangeClient, MiMoClient, MiMoError, PendingCompletion
 from .driver_prompts import IMPLEMENT, PLAN, SYSTEM, VERSION
@@ -250,6 +253,7 @@ def run_board(client, args, sdk, board: str) -> int:
                 if args.reference_api:
                     complete_reference_declarations(package["files"], stem, data["reference_api_contract"])
                 expand_operation_traces(package, plan)
+            unmapped_docs = separate_documentation_traces(package, plan)
             write_summary(directory / f"package-{attempt + 1}.json", package)
             previous_package = package
             findings = package_findings(package, paths, plan)
@@ -280,6 +284,7 @@ def run_board(client, args, sdk, board: str) -> int:
                     artifacts = materialize(driver_root, package["files"])
                     write_summary(directory / "trace.json", {
                         "trace": package["trace"], "limitations": package["limitations"],
+                        "unmapped_documentation_traces": unmapped_docs,
                     })
                     report = {"board": board, "stem": stem, "model": args.model, "status": "verified",
                               "fingerprint": signature, "artifacts": artifacts, "validation": validation,
